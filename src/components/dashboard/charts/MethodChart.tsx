@@ -2,6 +2,7 @@ import { useMemo } from 'react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Legend, PieLabelRenderProps } from 'recharts';
 import { DeliveryRecord } from '../../../types/schema';
 import { prepareMethodData } from '../../../utils/chartHelpers';
+import { METHOD_NAMES } from '../../../constants/deliveryMethods';
 import { useThemeMode } from '../../../hooks/useThemeMode';
 
 interface MethodChartProps {
@@ -55,7 +56,7 @@ export function MethodChart({ data }: MethodChartProps) {
                         label={renderCustomizedLabel}
                     >
                         {chartData.map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.name === 'Safe Place' ? '#14b8a6' : COLORS[index % COLORS.length]} stroke={isDark ? '#1e293b' : '#fff'} />
+                            <Cell key={`cell-${index}`} fill={entry.name === METHOD_NAMES.SAFE_PLACE ? '#14b8a6' : COLORS[index % COLORS.length]} stroke={isDark ? '#1e293b' : '#fff'} />
                         ))}
                     </Pie>
                     <Legend />

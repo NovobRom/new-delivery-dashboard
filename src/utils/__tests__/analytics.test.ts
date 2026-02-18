@@ -6,9 +6,9 @@ function makeRecord(overrides: Partial<DeliveryRecord> = {}): DeliveryRecord {
     return {
         id: '1', date: '01.02.2025', courierId: 'C1', routeCode: 'R1',
         documentNumber: '', city: '', barcode: '', secondBarcode: '',
-        qty: '1', plannedDate: '01.02.2025', executionDate: '01.02.2025',
+        qty: 1, plannedDate: '01.02.2025', executionDate: '01.02.2025',
         city2: '', date3: '', refNumber: '', date4: '', type: '',
-        weight: '1', volumetricWeight: '', volumetricWeight2: '',
+        weight: 1, volumetricWeight: 0, volumetricWeight2: 0,
         country: '', phone: '', service: '', region: '',
         clientType: '', phone2: '', recipientName: '',
         city3: '', address: 'Address 1',

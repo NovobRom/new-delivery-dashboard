@@ -5,6 +5,18 @@ import { z } from 'zod';
 // instead missing values become '' which downstream code handles.
 const optStr = z.string().optional().default('');
 
+// Numeric field: accepts string or number from CSV, normalizes to number.
+// Comma → dot, empty/garbage → 0.
+const optNum = z
+    .union([z.string(), z.number()])
+    .optional()
+    .transform((val) => {
+        if (val === undefined || val === null || val === '') return 0;
+        if (typeof val === 'number') return val;
+        const num = parseFloat(val.replace(',', '.'));
+        return isNaN(num) ? 0 : num;
+    });
+
 export const DeliveryRecordSchema = z.object({
     id: optStr,                    // №
     date: optStr,                  // Дата відомості
@@ -14,7 +26,7 @@ export const DeliveryRecordSchema = z.object({
     city: optStr,                  // Місто
     barcode: optStr,               // ШК
     secondBarcode: optStr,         // ШК2
-    qty: optStr,                   // К-сть
+    qty: optNum,                   // К-сть
     plannedDate: optStr,           // Дата план
     executionDate: optStr,         // Дата виконання
     city2: optStr,                 // Місто2
@@ -22,9 +34,9 @@ export const DeliveryRecordSchema = z.object({
     refNumber: optStr,             // RefNumber
     date4: optStr,                 // Дата4
     type: optStr,                  // Тип
-    weight: optStr,                // Вага
-    volumetricWeight: optStr,      // Об'ємна вага
-    volumetricWeight2: optStr,     // Об'ємна вага2
+    weight: optNum,                // Вага
+    volumetricWeight: optNum,      // Об'ємна вага
+    volumetricWeight2: optNum,     // Об'ємна вага2
     country: optStr,               // Країна
     phone: optStr,                 // Телефон
     service: optStr,               // Service

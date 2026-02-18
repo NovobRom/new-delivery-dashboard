@@ -1,3 +1,11 @@
+// Canonical display names returned by normalizeMethodName().
+export const METHOD_NAMES = {
+    HAND_DELIVERY: 'Hand Delivery',
+    POST_OFFICE: 'Post Office',
+    SAFE_PLACE: 'Safe Place',
+    UNKNOWN: 'Unknown',
+} as const;
+
 // Keywords for identifying delivery method categories (case-insensitive substring match).
 // Extend these arrays when new method names appear in CSV data.
 
@@ -34,11 +42,11 @@ export function isSafePlace(
 export function normalizeMethodName(method: string | undefined, safePlaceCol: string | undefined): string {
   const m = norm(method);
 
-  if (m.includes('hand') || m.includes('руки') || m.includes('в руки')) return 'Hand Delivery';
-  if (m.includes('post')) return 'Post Office';
-  if (m.includes('safe') || m.includes('безпечн')) return 'Safe Place';
+  if (m.includes('hand') || m.includes('руки') || m.includes('в руки')) return METHOD_NAMES.HAND_DELIVERY;
+  if (m.includes('post')) return METHOD_NAMES.POST_OFFICE;
+  if (m.includes('safe') || m.includes('безпечн')) return METHOD_NAMES.SAFE_PLACE;
 
-  if (isSafePlaceColumn(safePlaceCol)) return 'Safe Place';
+  if (isSafePlaceColumn(safePlaceCol)) return METHOD_NAMES.SAFE_PLACE;
 
-  return method || 'Unknown';
+  return method || METHOD_NAMES.UNKNOWN;
 }
