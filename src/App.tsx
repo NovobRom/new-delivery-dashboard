@@ -44,7 +44,7 @@ function App() {
           path="/"
           element={records.length > 0 ? <Dashboard /> : <Navigate to="/import" replace />}
         />
-        <Route path="/import" element={<ImportPage />} />
+        <Route path="/import" element={records.length > 0 ? <Navigate to="/" replace /> : <ImportPage />} />
         <Route path="/dashboard" element={records.length > 0 ? <Dashboard /> : <Navigate to="/import" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

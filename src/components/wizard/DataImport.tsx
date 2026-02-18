@@ -1,4 +1,5 @@
 import { useRef, ChangeEvent, useState } from 'react';
+import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
 import { setRecords, setLoading, setError } from '../../store/slices/dataSlice';
@@ -8,6 +9,7 @@ import { UploadCloud, Loader2, AlertTriangle } from 'lucide-react';
 
 export function DataImport() {
     const dispatch = useAppDispatch();
+    const navigate = useNavigate();
     const { t } = useTranslation();
     const fileInputRef = useRef<HTMLInputElement>(null);
     const [isProcessing, setIsProcessing] = useState(false);
@@ -34,6 +36,10 @@ export function DataImport() {
 
             if (result.warnings.length > 0) {
                 setWarnings(result.warnings);
+            }
+
+            if (result.records.length > 0) {
+                navigate('/');
             }
         } catch (err) {
             console.error(err);
