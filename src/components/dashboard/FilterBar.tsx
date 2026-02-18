@@ -1,65 +1,71 @@
-import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
-import { setDateRange, setSelectedCity, setSelectedCourier, resetFilters } from '../../store/slices/filtersSlice';
-import { selectUniqueCities, selectUniqueCouriers } from '../../store/selectors';
-import { Button } from '../ui/Button';
+import {
+    setDateRange,
+    setSelectedDepartments,
+    setSelectedCouriers,
+    resetFilters,
+} from '../../store/slices/filtersSlice';
+import {
+    selectUniqueDepartments,
+    selectUniqueCouriers,
+    selectDateBounds,
+} from '../../store/selectors';
+import { DateRangePicker } from '../ui/DateRangePicker';
+import { MultiSelect } from '../ui/MultiSelect';
 import { Filter, X } from 'lucide-react';
 
 export function FilterBar() {
     const dispatch = useAppDispatch();
-    const { t } = useTranslation();
     const filters = useAppSelector((state) => state.filters);
-    const cities = useAppSelector(selectUniqueCities);
+    const departments = useAppSelector(selectUniqueDepartments);
     const couriers = useAppSelector(selectUniqueCouriers);
+    const dateBounds = useAppSelector(selectDateBounds);
 
-    const hasActiveFilters = filters.dateRange.start || filters.dateRange.end || filters.selectedCity || filters.selectedCourier;
+    const hasActiveFilters =
+        filters.dateRange.start ||
+        filters.dateRange.end ||
+        filters.selectedDepartments.length > 0 ||
+        filters.selectedCouriers.length > 0;
 
     return (
-        <div className="flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-800/50 backdrop-blur-sm">
-            <Filter size={16} className="text-slate-400" />
+        <div className="relative z-[60] flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-800/50 backdrop-blur-sm">
+            <Filter size={16} className="text-slate-400 shrink-0" />
 
-            <input
-                type="date"
-                value={filters.dateRange.start || ''}
-                onChange={(e) => dispatch(setDateRange({ ...filters.dateRange, start: e.target.value || null }))}
-                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
-                placeholder={t('filters.startDate')}
-            />
-            <span className="text-slate-400 text-sm">—</span>
-            <input
-                type="date"
-                value={filters.dateRange.end || ''}
-                onChange={(e) => dispatch(setDateRange({ ...filters.dateRange, end: e.target.value || null }))}
-                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
+            {/* Date Range Picker */}
+            <DateRangePicker
+                value={filters.dateRange}
+                onChange={(range) => dispatch(setDateRange(range))}
+                maxDate={dateBounds.max}
+                minDate={dateBounds.min}
             />
 
-            <select
-                value={filters.selectedCity || ''}
-                onChange={(e) => dispatch(setSelectedCity(e.target.value || null))}
-                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
-            >
-                <option value="">{t('kpi.totalLoaded')} — {t('sidebar.dashboard')}</option>
-                {cities.map((city) => (
-                    <option key={city} value={city}>{city}</option>
-                ))}
-            </select>
+            {/* Department multi-select */}
+            <MultiSelect
+                options={departments}
+                selected={filters.selectedDepartments}
+                onChange={(vals) => dispatch(setSelectedDepartments(vals))}
+                placeholder="Підрозділ — Дашборд"
+                selectedLabel="Підрозділ"
+            />
 
-            <select
-                value={filters.selectedCourier || ''}
-                onChange={(e) => dispatch(setSelectedCourier(e.target.value || null))}
-                className="rounded-md border border-slate-300 bg-white px-2 py-1 text-sm dark:border-slate-600 dark:bg-slate-700 dark:text-slate-200"
-            >
-                <option value="">{t('charts.courier')}</option>
-                {couriers.map((c) => (
-                    <option key={c} value={c}>{c}</option>
-                ))}
-            </select>
+            {/* Courier multi-select */}
+            <MultiSelect
+                options={couriers}
+                selected={filters.selectedCouriers}
+                onChange={(vals) => dispatch(setSelectedCouriers(vals))}
+                placeholder="Кур'єр"
+                selectedLabel="Кур'єрів"
+            />
 
+            {/* Reset */}
             {hasActiveFilters && (
-                <Button variant="ghost" size="sm" onClick={() => dispatch(resetFilters())} className="text-red-500">
-                    <X size={14} className="mr-1" />
+                <button
+                    onClick={() => dispatch(resetFilters())}
+                    className="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-sm font-medium text-red-500 transition hover:bg-red-50 dark:hover:bg-red-900/20"
+                >
+                    <X size={14} />
                     Reset
-                </Button>
+                </button>
             )}
         </div>
     );

@@ -34,6 +34,20 @@
     "noReason": "Без причини",
     "reasonsTitle": "Причини недоставки:"
   },
+  "filters": {
+    "allTime": "Весь час",
+    "thisMonth": "Цей місяць",
+    "lastMonth": "Минулий місяць",
+    "thisWeek": "Цей тиждень",
+    "last7Days": "Останні 7 днів",
+    "department": "Підрозділ",
+    "courier": "Кур'єр",
+    "customRange": "Довільний діапазон",
+    "presets": "Шаблони",
+    "apply": "Застосувати",
+    "cancel": "Скасувати",
+    "selected": "обрано"
+  },
   "charts": {
     "volumeTrend": "A. Тренд обсягу",
     "regionalComparison": "B. Регіональне порівняння",

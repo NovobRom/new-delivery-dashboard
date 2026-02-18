@@ -2,14 +2,14 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 
 interface FilterState {
     dateRange: { start: string | null; end: string | null };
-    selectedCity: string | null;
-    selectedCourier: string | null;
+    selectedDepartments: string[];
+    selectedCouriers: string[];
 }
 
 const initialState: FilterState = {
     dateRange: { start: null, end: null },
-    selectedCity: null,
-    selectedCourier: null,
+    selectedDepartments: [],
+    selectedCouriers: [],
 };
 
 export const filtersSlice = createSlice({
@@ -19,20 +19,43 @@ export const filtersSlice = createSlice({
         setDateRange: (state, action: PayloadAction<{ start: string | null; end: string | null }>) => {
             state.dateRange = action.payload;
         },
-        setSelectedCity: (state, action: PayloadAction<string | null>) => {
-            state.selectedCity = action.payload;
+        setSelectedDepartments: (state, action: PayloadAction<string[]>) => {
+            state.selectedDepartments = action.payload;
         },
-        setSelectedCourier: (state, action: PayloadAction<string | null>) => {
-            state.selectedCourier = action.payload;
+        toggleDepartment: (state, action: PayloadAction<string>) => {
+            const idx = state.selectedDepartments.indexOf(action.payload);
+            if (idx === -1) {
+                state.selectedDepartments.push(action.payload);
+            } else {
+                state.selectedDepartments.splice(idx, 1);
+            }
+        },
+        setSelectedCouriers: (state, action: PayloadAction<string[]>) => {
+            state.selectedCouriers = action.payload;
+        },
+        toggleCourier: (state, action: PayloadAction<string>) => {
+            const idx = state.selectedCouriers.indexOf(action.payload);
+            if (idx === -1) {
+                state.selectedCouriers.push(action.payload);
+            } else {
+                state.selectedCouriers.splice(idx, 1);
+            }
         },
         resetFilters: (state) => {
             state.dateRange = { start: null, end: null };
-            state.selectedCity = null;
-            state.selectedCourier = null;
+            state.selectedDepartments = [];
+            state.selectedCouriers = [];
         }
     },
 });
 
-export const { setDateRange, setSelectedCity, setSelectedCourier, resetFilters } = filtersSlice.actions;
+export const {
+    setDateRange,
+    setSelectedDepartments,
+    toggleDepartment,
+    setSelectedCouriers,
+    toggleCourier,
+    resetFilters,
+} = filtersSlice.actions;
 
 export default filtersSlice.reducer;

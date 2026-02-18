@@ -17,34 +17,51 @@ export const selectFilteredRecords = createSelector(
 
             filtered = filtered.filter((r) => {
                 const recordDate = parseDate(r.date);
-                if (!recordDate) return true; // Keep records with unparseable dates
+                if (!recordDate) return true;
                 if (startDate && recordDate < startDate) return false;
                 if (endDate && recordDate > endDate) return false;
                 return true;
             });
         }
 
-        // City filter
-        if (filters.selectedCity) {
-            filtered = filtered.filter((r) => r.city === filters.selectedCity);
+        // Department multi-filter
+        if (filters.selectedDepartments.length > 0) {
+            filtered = filtered.filter((r) => filters.selectedDepartments.includes(r.department));
         }
 
-        // Courier filter
-        if (filters.selectedCourier) {
-            filtered = filtered.filter((r) => r.courierId === filters.selectedCourier);
+        // Courier multi-filter
+        if (filters.selectedCouriers.length > 0) {
+            filtered = filtered.filter((r) => filters.selectedCouriers.includes(r.courierId));
         }
 
         return filtered;
     },
 );
 
-/** Extract unique values for filter dropdowns */
-export const selectUniqueCities = createSelector(
+/** Unique departments for filter dropdown */
+export const selectUniqueDepartments = createSelector(
     [selectRecords],
-    (records) => [...new Set(records.map((r) => r.city).filter(Boolean))].sort(),
+    (records) => [...new Set(records.map((r) => r.department).filter(Boolean))].sort(),
 );
 
+/** Unique couriers for filter dropdown */
 export const selectUniqueCouriers = createSelector(
     [selectRecords],
     (records) => [...new Set(records.map((r) => r.courierId).filter(Boolean))].sort(),
+);
+
+/** Min/max dates from the dataset — used for preset calculations */
+export const selectDateBounds = createSelector(
+    [selectRecords],
+    (records) => {
+        const dates = records
+            .map((r) => parseDate(r.date))
+            .filter((d): d is Date => d !== null);
+        if (dates.length === 0) return { min: null, max: null };
+        const times = dates.map((d) => d.getTime());
+        return {
+            min: new Date(Math.min(...times)),
+            max: new Date(Math.max(...times)),
+        };
+    },
 );

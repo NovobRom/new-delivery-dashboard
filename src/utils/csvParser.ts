@@ -9,6 +9,7 @@ const HEADER_MAPPING: Record<string, keyof DeliveryRecord> = {
     'Район (статичний/динамічний)': 'routeCode',
     'Номер відомості завантаження кур\'єра': 'documentNumber',
     'Місто одержувача': 'city',
+    'Підрозділ відомості': 'department',
     'Номер ШК': 'barcode',
     // 'ШК2': 'secondBarcode', // Not present
     'Кількість місць': 'qty',

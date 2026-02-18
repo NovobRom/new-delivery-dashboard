@@ -34,6 +34,20 @@
     "noReason": "No Reason",
     "reasonsTitle": "Non-delivery reasons:"
   },
+  "filters": {
+    "allTime": "All Time",
+    "thisMonth": "This Month",
+    "lastMonth": "Last Month",
+    "thisWeek": "This Week",
+    "last7Days": "Last 7 Days",
+    "department": "Department",
+    "courier": "Courier",
+    "customRange": "Custom Range",
+    "presets": "Presets",
+    "apply": "Apply Range",
+    "cancel": "Cancel",
+    "selected": "selected"
+  },
   "charts": {
     "volumeTrend": "A. Volume Trend",
     "regionalComparison": "B. Regional Comparison",

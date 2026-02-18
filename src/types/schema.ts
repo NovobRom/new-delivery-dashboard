@@ -23,7 +23,8 @@ export const DeliveryRecordSchema = z.object({
     courierId: optStr,             // Кур'єр
     routeCode: optStr,             // Маршрут
     documentNumber: optStr,        // Номер відомості
-    city: optStr,                  // Місто
+    city: optStr,                  // Місто одержувача
+    department: optStr,            // Підрозділ відомості
     barcode: optStr,               // ШК
     secondBarcode: optStr,         // ШК2
     qty: optNum,                   // К-сть
