@@ -1,19 +1,22 @@
 import { LayoutDashboard, FileSpreadsheet, Settings, Truck, BarChart3, ChevronLeft, ChevronRight } from 'lucide-react';
+import { NavLink } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { toggleSidebar } from '../../store/slices/uiSlice';
 import { Button } from '../ui/Button';
 import { motion } from 'framer-motion';
 
 const NAV_ITEMS = [
-    { icon: LayoutDashboard, label: 'Dashboard', id: 'dashboard' },
-    { icon: FileSpreadsheet, label: 'Data Import', id: 'import' },
-    { icon: BarChart3, label: 'Analysis', id: 'analysis' },
-    { icon: Truck, label: 'Couriers', id: 'couriers' },
-    { icon: Settings, label: 'Settings', id: 'settings' },
+    { icon: LayoutDashboard, labelKey: 'sidebar.dashboard', id: 'dashboard', to: '/dashboard' },
+    { icon: FileSpreadsheet, labelKey: 'sidebar.import', id: 'import', to: '/import' },
+    { icon: BarChart3, labelKey: 'sidebar.analysis', id: 'analysis', to: '/dashboard' },
+    { icon: Truck, labelKey: 'sidebar.couriers', id: 'couriers', to: '/dashboard' },
+    { icon: Settings, labelKey: 'sidebar.settings', id: 'settings', to: '/dashboard' },
 ];
 
 export function Sidebar() {
     const dispatch = useAppDispatch();
+    const { t } = useTranslation();
     const { isSidebarOpen } = useAppSelector((state) => state.ui);
 
     return (
@@ -25,7 +28,7 @@ export function Sidebar() {
             <div className="flex h-16 items-center justify-between px-4">
                 {isSidebarOpen && (
                     <span className="text-xl font-bold bg-gradient-to-r from-brand-red to-red-400 bg-clip-text text-transparent">
-                        LOGISTICS
+                        {t('sidebar.logo')}
                     </span>
                 )}
                 <Button
@@ -40,18 +43,23 @@ export function Sidebar() {
 
             <nav className="flex-1 space-y-2 p-2">
                 {NAV_ITEMS.map((item) => (
-                    <Button
+                    <NavLink
                         key={item.id}
-                        variant="ghost"
-                        className={`w-full justify-start ${!isSidebarOpen && 'justify-center px-0'}`}
+                        to={item.to}
+                        className={({ isActive }) =>
+                            `flex items-center rounded-md px-3 py-2 text-sm font-medium transition-colors
+                            ${isActive
+                                ? 'bg-brand-red/10 text-brand-red dark:bg-brand-red/20'
+                                : 'text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800'
+                            }
+                            ${!isSidebarOpen ? 'justify-center px-0' : ''}`
+                        }
                     >
                         <item.icon size={20} className={isSidebarOpen ? 'mr-2' : ''} />
-                        {isSidebarOpen && <span>{item.label}</span>}
-                    </Button>
+                        {isSidebarOpen && <span>{t(item.labelKey)}</span>}
+                    </NavLink>
                 ))}
             </nav>
-
-
         </motion.aside>
     );
 }

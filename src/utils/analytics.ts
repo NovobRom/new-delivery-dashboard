@@ -1,4 +1,7 @@
 import { DeliveryRecord } from '../types/schema';
+import { isDelivered, isUndelivered } from '../constants/statuses';
+import { isHandDelivery, isSafePlace } from '../constants/deliveryMethods';
+import { isSameDay } from './dateUtils';
 
 export interface DashboardKPIs {
     totalDocs: number;
@@ -61,20 +64,17 @@ export const calculateKPIs = (records: DeliveryRecord[]): DashboardKPIs => {
         if (r.routeCode) routes.add(r.routeCode);
         if (r.address) uniqueAddresses.add(r.address);
 
-        const statusLower = r.status?.toLowerCase() || '';
-        // Strict check: Only "доставлено" calculates as successful delivery on date
-        const isDelivered = statusLower === 'доставлено';
-
-        if (isDelivered) {
+        if (isDelivered(r.status)) {
             deliveredOnDateCount++;
 
-            // On Time Check
-            if (r.executionDate && r.plannedDate && r.executionDate === r.plannedDate) {
-                onTimeCount++;
-            } else {
-                if (!r.plannedDate) onTimeCount++;
+            // On Time Check: compare parsed dates instead of raw strings
+            if (r.executionDate && r.plannedDate) {
+                if (isSameDay(r.executionDate, r.plannedDate)) {
+                    onTimeCount++;
+                }
             }
-        } else if (statusLower === 'не доставлено') {
+            // If plannedDate is missing, we do NOT count it as on-time
+        } else if (isUndelivered(r.status)) {
             // Not Delivered Logic based on column "Статус доставки на дату відомості"
             // If "не доставлено", check reason in "Причина недоставки на дату відомості"
             const reason = r.reason?.trim();
@@ -89,20 +89,12 @@ export const calculateKPIs = (records: DeliveryRecord[]): DashboardKPIs => {
             }
         }
 
-        // Methods
-        const methodLower = r.deliveryMethod?.toLowerCase() || '';
-        const safePlaceVal = r.safePlace?.toLowerCase() || '';
-
-        // Hand Delivery
-        if (methodLower.includes('hand') || methodLower.includes('руки') || methodLower.includes('в руки')) {
+        // Methods — use centralized predicates
+        if (isHandDelivery(r.deliveryMethod)) {
             handDeliveryCount++;
         }
 
-        // SafePlace logic: check method OR specific column
-        const isSafePlaceMethod = methodLower.includes('safe') || methodLower.includes('безпечн');
-        const isSafePlaceCol = safePlaceVal === 'yes' || safePlaceVal === '1' || safePlaceVal === 'true' || safePlaceVal.length > 1;
-
-        if (isSafePlaceMethod || isSafePlaceCol) {
+        if (isSafePlace(r.deliveryMethod, r.safePlace)) {
             safePlaceCount++;
         }
     });

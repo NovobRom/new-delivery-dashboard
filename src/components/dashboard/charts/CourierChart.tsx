@@ -1,10 +1,7 @@
 import { useMemo } from 'react';
-// Removed unused tooltip imports from UI lib as we use custom implementation
-
+import { useTranslation } from 'react-i18next';
 import { DeliveryRecord } from '../../../types/schema';
 import { prepareCourierData } from '../../../utils/chartHelpers';
-// import { useAppSelector } from '../../../store/hooks'; // Unused
-
 
 interface CourierChartProps {
     data: DeliveryRecord[];
@@ -12,10 +9,7 @@ interface CourierChartProps {
 
 export function CourierChart({ data }: CourierChartProps) {
     const { couriers, dates } = useMemo(() => prepareCourierData(data), [data]);
-    // const { theme } = useAppSelector((state) => state.ui); // Unused
-
-    // const isDark = theme === 'dark'; // Unused, using CSS classes
-
+    const { t } = useTranslation();
 
     const getCellColor = (rate: number) => {
         if (rate >= 95) return 'bg-emerald-500 text-white';
@@ -29,7 +23,7 @@ export function CourierChart({ data }: CourierChartProps) {
                 {/* Header Row */}
                 <div className="flex border-b border-slate-200 dark:border-slate-700 pb-2 mb-2">
                     <div className="sticky left-0 z-10 w-48 flex-shrink-0 font-semibold text-slate-700 bg-white dark:bg-slate-800 dark:text-slate-300 p-2 shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]">
-                        Courier
+                        {t('charts.courier')}
                     </div>
                     {dates.map((date) => (
                         <div key={date} className="flex-1 min-w-[60px] text-center font-medium text-slate-600 dark:text-slate-400 p-2 transform -rotate-45 origin-bottom-left sm:rotate-0 sm:origin-center translate-y-2 sm:translate-y-0">
@@ -69,15 +63,15 @@ export function CourierChart({ data }: CourierChartProps) {
                                             <p className="text-slate-500 dark:text-slate-400">{date}</p>
                                             <div className="my-1 border-t border-slate-100 dark:border-slate-700"></div>
                                             <div className="flex justify-between">
-                                                <span className="text-slate-600 dark:text-slate-300">Loaded:</span>
+                                                <span className="text-slate-600 dark:text-slate-300">{t('charts.loaded')}:</span>
                                                 <span className="font-medium text-slate-900 dark:text-white">{dayData.loaded}</span>
                                             </div>
                                             <div className="flex justify-between">
-                                                <span className="text-slate-600 dark:text-slate-300">Delivered:</span>
+                                                <span className="text-slate-600 dark:text-slate-300">{t('charts.delivered')}:</span>
                                                 <span className="font-medium text-emerald-500">{dayData.delivered}</span>
                                             </div>
                                             <div className="flex justify-between">
-                                                <span className="text-slate-600 dark:text-slate-300">Rate:</span>
+                                                <span className="text-slate-600 dark:text-slate-300">{t('charts.rate')}:</span>
                                                 <span className={`font-bold ${dayData.rate >= 95 ? 'text-emerald-500' : dayData.rate >= 90 ? 'text-amber-500' : 'text-red-500'}`}>
                                                     {dayData.rate}%
                                                 </span>

@@ -1,49 +1,49 @@
 import { z } from 'zod';
 
-// Define the raw schema based on the CSV columns (45 columns)
-// We will refine this as we understand the data better.
-// Using loose string types for now to ensure parsing succeeds.
-export const DeliveryRecordSchema = z.object({
-    id: z.string(), // №
-    date: z.string(), // Дата відомості
-    courierId: z.string(), // Кур'єр
-    routeCode: z.string(), // Маршрут
-    documentNumber: z.string(), // Номер відомості
-    city: z.string(), // Місто
-    barcode: z.string(), // ШК
-    secondBarcode: z.string().optional(), // ШК2
-    qty: z.string(), // К-сть
-    plannedDate: z.string(), // Дата план
-    executionDate: z.string(), // Дата виконання
-    city2: z.string(), // Місто2
-    date3: z.string(), // Дата3
-    refNumber: z.string(), // RefNumber
-    date4: z.string(), // Дата4
-    type: z.string(), // Тип
-    weight: z.string(), // Вага
-    volumetricWeight: z.string(), // Об'ємна вага
-    volumetricWeight2: z.string(), // Об'ємна вага2
-    country: z.string(), // Країна
-    phone: z.string(), // Телефон
-    service: z.string(), // Service
-    region: z.string(), // Region
-    clientType: z.string(), // Тип клієнта
-    phone2: z.string(), // Телефон2
-    recipientName: z.string(), // Отримувач
-    city3: z.string(), // Місто3
-    address: z.string(), // Адреса
-    status: z.string(), // Статус
-    deliveryTime: z.string(), // Час доставки
-    interval: z.string(), // Інтервал
-    deliveryMethod: z.string(), // Метод доставки
-    isPaid: z.string(), // Сплачено
+// All fields optional with empty-string defaults.
+// CSV rows may have missing columns — Zod won't reject them;
+// instead missing values become '' which downstream code handles.
+const optStr = z.string().optional().default('');
 
-    isReturned: z.string(), // Повернення
-    reason: z.string().optional(), // Причина
-    comment: z.string().optional(), // Коментар
-    safePlace: z.string().optional(), // SafePlace
-    shipmentNumber: z.string().optional(), // Номер Shipment
-    // Add more fields if needed based on the 45 columns
+export const DeliveryRecordSchema = z.object({
+    id: optStr,                    // №
+    date: optStr,                  // Дата відомості
+    courierId: optStr,             // Кур'єр
+    routeCode: optStr,             // Маршрут
+    documentNumber: optStr,        // Номер відомості
+    city: optStr,                  // Місто
+    barcode: optStr,               // ШК
+    secondBarcode: optStr,         // ШК2
+    qty: optStr,                   // К-сть
+    plannedDate: optStr,           // Дата план
+    executionDate: optStr,         // Дата виконання
+    city2: optStr,                 // Місто2
+    date3: optStr,                 // Дата3
+    refNumber: optStr,             // RefNumber
+    date4: optStr,                 // Дата4
+    type: optStr,                  // Тип
+    weight: optStr,                // Вага
+    volumetricWeight: optStr,      // Об'ємна вага
+    volumetricWeight2: optStr,     // Об'ємна вага2
+    country: optStr,               // Країна
+    phone: optStr,                 // Телефон
+    service: optStr,               // Service
+    region: optStr,                // Region
+    clientType: optStr,            // Тип клієнта
+    phone2: optStr,                // Телефон2
+    recipientName: optStr,         // Отримувач
+    city3: optStr,                 // Місто3
+    address: optStr,               // Адреса
+    status: optStr,                // Статус
+    deliveryTime: optStr,          // Час доставки
+    interval: optStr,              // Інтервал
+    deliveryMethod: optStr,        // Метод доставки
+    isPaid: optStr,                // Сплачено
+    isReturned: optStr,            // Повернення
+    reason: optStr,                // Причина
+    comment: optStr,               // Коментар
+    safePlace: optStr,             // SafePlace
+    shipmentNumber: optStr,        // Номер Shipment
 });
 
 export type DeliveryRecord = z.infer<typeof DeliveryRecordSchema>;

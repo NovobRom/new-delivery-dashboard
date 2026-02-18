@@ -1,10 +1,12 @@
 import { Moon, Sun, Languages } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { setTheme, setLanguage } from '../../store/slices/uiSlice';
 import { Button } from '../ui/Button';
 
 export function Header() {
     const dispatch = useAppDispatch();
+    const { t, i18n } = useTranslation();
     const { theme, currentLang } = useAppSelector((state) => state.ui);
 
     const toggleTheme = () => {
@@ -12,7 +14,9 @@ export function Header() {
     };
 
     const toggleLang = () => {
-        dispatch(setLanguage(currentLang === 'ua' ? 'en' : 'ua'));
+        const newLang = currentLang === 'ua' ? 'en' : 'ua';
+        dispatch(setLanguage(newLang));
+        i18n.changeLanguage(newLang);
     };
 
     return (
@@ -24,19 +28,19 @@ export function Header() {
                     className="h-8 w-8"
                 />
                 <h1 className="text-lg font-semibold text-slate-900 dark:text-white">
-                    Delivery <span className="text-brand-red">Dashboard</span>
+                    {t('header.delivery')} <span className="text-brand-red">{t('header.dashboard')}</span>
                 </h1>
             </div>
 
             <div className="flex items-center gap-2">
-                <Button variant="ghost" size="icon" onClick={toggleLang} title="Switch Language" className="relative">
+                <Button variant="ghost" size="icon" onClick={toggleLang} title={t('header.switchLang')} className="relative">
                     <Languages size={20} />
                     <span className="absolute -bottom-1 -right-1 text-[10px] font-bold bg-brand-red text-white px-1 rounded-full border border-white dark:border-slate-900">
                         {currentLang.toUpperCase()}
                     </span>
                 </Button>
 
-                <Button variant="ghost" size="icon" onClick={toggleTheme} title="Toggle Theme">
+                <Button variant="ghost" size="icon" onClick={toggleTheme} title={t('header.toggleTheme')}>
                     {theme === 'dark' ? <Sun size={20} className="text-yellow-400" /> : <Moon size={20} className="text-slate-600" />}
                 </Button>
             </div>

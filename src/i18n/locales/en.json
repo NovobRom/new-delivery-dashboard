@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "Delivery Dashboard",
+    "noData": "No Data Loaded",
+    "noDataDescription": "Please import your \"Detailed Table\" CSV file to start analyzing the logistics performance."
+  },
+  "sidebar": {
+    "logo": "LOGISTICS",
+    "dashboard": "Dashboard",
+    "import": "Data Import",
+    "analysis": "Analysis",
+    "couriers": "Couriers",
+    "settings": "Settings"
+  },
+  "header": {
+    "delivery": "Delivery",
+    "dashboard": "Dashboard",
+    "switchLang": "Switch Language",
+    "toggleTheme": "Toggle Theme"
+  },
+  "import": {
+    "processing": "Processing...",
+    "importData": "Import Data",
+    "warnings": "Import Warnings"
+  },
+  "kpi": {
+    "totalLoaded": "Total Loaded",
+    "deliveredOnDate": "Delivered on delivery date",
+    "successRate": "Success Rate",
+    "efficiency": "Efficiency",
+    "handDelivery": "Hand Delivery",
+    "safePlace": "Safe Place",
+    "withReason": "With Reason",
+    "noReason": "No Reason",
+    "reasonsTitle": "Non-delivery reasons:"
+  },
+  "charts": {
+    "volumeTrend": "A. Volume Trend",
+    "regionalComparison": "B. Regional Comparison",
+    "deliveryMethods": "C. Delivery Methods",
+    "courierPerformance": "D. Courier Performance",
+    "deliveryDensity": "E. Delivery Density",
+    "totalParcels": "Total Parcels",
+    "delivered": "Delivered",
+    "loadedParcels": "Loaded Parcels",
+    "uniqueAddresses": "Unique Addresses",
+    "courier": "Courier",
+    "loaded": "Loaded",
+    "rate": "Rate"
+  }
+}
