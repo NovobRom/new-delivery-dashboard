@@ -1,0 +1,51 @@
+{
+  "app": {
+    "title": "Дашборд Доставки",
+    "noData": "Дані не завантажені",
+    "noDataDescription": "Імпортуйте файл CSV \"Детальна таблиця\" для початку аналізу логістичних показників."
+  },
+  "sidebar": {
+    "logo": "ЛОГІСТИКА",
+    "dashboard": "Дашборд",
+    "import": "Імпорт даних",
+    "analysis": "Аналіз",
+    "couriers": "Кур'єри",
+    "settings": "Налаштування"
+  },
+  "header": {
+    "delivery": "Доставка",
+    "dashboard": "Дашборд",
+    "switchLang": "Змінити мову",
+    "toggleTheme": "Змінити тему"
+  },
+  "import": {
+    "processing": "Обробка...",
+    "importData": "Імпорт даних",
+    "warnings": "Попередження імпорту"
+  },
+  "kpi": {
+    "totalLoaded": "Всього завантажено",
+    "deliveredOnDate": "Доставлено в день доставки",
+    "successRate": "Рівень успіху",
+    "efficiency": "Ефективність",
+    "handDelivery": "Вручну",
+    "safePlace": "Safe Place",
+    "withReason": "З причиною",
+    "noReason": "Без причини",
+    "reasonsTitle": "Причини недоставки:"
+  },
+  "charts": {
+    "volumeTrend": "A. Тренд обсягу",
+    "regionalComparison": "B. Регіональне порівняння",
+    "deliveryMethods": "C. Методи доставки",
+    "courierPerformance": "D. Показники кур'єрів",
+    "deliveryDensity": "E. Щільність доставки",
+    "totalParcels": "Всього посилок",
+    "delivered": "Доставлено",
+    "loadedParcels": "Завантажено посилок",
+    "uniqueAddresses": "Унікальні адреси",
+    "courier": "Кур'єр",
+    "loaded": "Завантажено",
+    "rate": "Рейт"
+  }
+}

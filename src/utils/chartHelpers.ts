@@ -1,18 +1,7 @@
 import { DeliveryRecord } from '@/types/schema';
-import { parse, isValid } from 'date-fns';
-
-const parseDate = (dateStr: string) => {
-    if (!dateStr) return null;
-
-    // Normalize separator to dots (handle both / and -)
-    const normalized = dateStr.replace(/[\/\-]/g, '.');
-
-    // Try parsing dd.MM.yyyy
-    const parsed = parse(normalized, 'dd.MM.yyyy', new Date());
-
-    if (isValid(parsed)) return parsed;
-    return null;
-};
+import { isDelivered } from '@/constants/statuses';
+import { normalizeMethodName } from '@/constants/deliveryMethods';
+import { compareDates } from '@/utils/dateUtils';
 
 export const prepareTrendData = (records: DeliveryRecord[]) => {
     const grouped: Record<string, { date: string; total: number; delivered: number }> = {};
@@ -23,23 +12,14 @@ export const prepareTrendData = (records: DeliveryRecord[]) => {
             grouped[dateKey] = { date: dateKey, total: 0, delivered: 0 };
         }
 
-        grouped[dateKey].total += 1; // Count every row as loaded parsel
+        grouped[dateKey].total += 1; // Count every row as loaded parcel
 
-        const status = r.status?.toLowerCase() || '';
-        if (status === 'доставлено') {
+        if (isDelivered(r.status)) {
             grouped[dateKey].delivered += 1;
         }
     });
 
-    return Object.values(grouped).sort((a, b) => {
-        const dateA = parseDate(a.date);
-        const dateB = parseDate(b.date);
-
-        if (dateA && dateB) {
-            return dateA.getTime() - dateB.getTime();
-        }
-        return a.date.localeCompare(b.date);
-    });
+    return Object.values(grouped).sort((a, b) => compareDates(a.date, b.date));
 };
 
 export const prepareRegionalData = (records: DeliveryRecord[]) => {
@@ -54,8 +34,7 @@ export const prepareRegionalData = (records: DeliveryRecord[]) => {
         }
         grouped[region].total += 1;
 
-        const status = r.status?.toLowerCase() || '';
-        if (status === 'доставлено') {
+        if (isDelivered(r.status)) {
             grouped[region].delivered += 1;
         }
     });
@@ -74,23 +53,7 @@ export const prepareMethodData = (records: DeliveryRecord[]) => {
     const grouped: Record<string, number> = {};
 
     records.forEach((r) => {
-        // Handle "Safe Place" unification
-        // Check both 'deliveryMethod' and 'safePlace' column
-        let method = r.deliveryMethod || 'Unknown';
-
-        // Normalize names for better display
-        if (method.toLowerCase().includes('hand')) method = 'Hand Delivery';
-        else if (method.toLowerCase().includes('post')) method = 'Post Office';
-        else if (method.toLowerCase().includes('safe')) method = 'Safe Place';
-
-        // If safePlace calculation logic in analytics.ts suggests specific overrides, we should respect that,
-        // but for this chart, we usually visualize the 'deliveryMethod' field distribution. 
-        // However, if the user explicitly wants "Safe Place" visibility which might be hidden in other methods:
-        const isSafePlaceCol = r.safePlace === 'yes' || r.safePlace === '1' || r.safePlace === 'true';
-        if (isSafePlaceCol) {
-            method = 'Safe Place';
-        }
-
+        const method = normalizeMethodName(r.deliveryMethod, r.safePlace);
         grouped[method] = (grouped[method] || 0) + 1;
     });
 
@@ -125,7 +88,7 @@ export const prepareCourierData = (records: DeliveryRecord[]) => {
         courierMap[id].totalVolume += 1;
         courierMap[id].dates[date].loaded += 1;
 
-        if (r.status?.toLowerCase() === 'доставлено') {
+        if (isDelivered(r.status)) {
             courierMap[id].dates[date].delivered += 1;
         }
     });
@@ -138,12 +101,7 @@ export const prepareCourierData = (records: DeliveryRecord[]) => {
     });
 
     // Sort dates properly
-    const sortedDates = Array.from(allDates).sort((a, b) => {
-        const dateA = parseDate(a);
-        const dateB = parseDate(b);
-        if (dateA && dateB) return dateA.getTime() - dateB.getTime();
-        return a.localeCompare(b);
-    });
+    const sortedDates = Array.from(allDates).sort(compareDates);
 
     // Sort couriers by total volume
     const sortedCouriers = Object.values(courierMap).sort((a, b) => b.totalVolume - a.totalVolume);
@@ -175,12 +133,5 @@ export const prepareDensityData = (records: DeliveryRecord[]) => {
             addresses: item.addresses.size,
             density: item.addresses.size > 0 ? (item.loaded / item.addresses.size).toFixed(2) : '0'
         }))
-        .sort((a, b) => {
-            const dateA = parseDate(a.date);
-            const dateB = parseDate(b.date);
-            if (dateA && dateB) {
-                return dateA.getTime() - dateB.getTime();
-            }
-            return a.date.localeCompare(b.date);
-        });
+        .sort((a, b) => compareDates(a.date, b.date));
 };

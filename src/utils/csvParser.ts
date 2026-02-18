@@ -1,5 +1,5 @@
 import Papa from 'papaparse';
-import { DeliveryRecord } from '../types/schema';
+import { DeliveryRecord, DeliveryRecordSchema } from '../types/schema';
 
 // Mapping from CSV Ukrainian headers to our internal schema keys
 const HEADER_MAPPING: Record<string, keyof DeliveryRecord> = {
@@ -44,7 +44,12 @@ const HEADER_MAPPING: Record<string, keyof DeliveryRecord> = {
     'Номер Shipment': 'shipmentNumber',
 };
 
-export const parseCSV = (file: File): Promise<DeliveryRecord[]> => {
+export interface ParseResult {
+    records: DeliveryRecord[];
+    warnings: string[];
+}
+
+export const parseCSV = (file: File): Promise<ParseResult> => {
     return new Promise((resolve, reject) => {
         Papa.parse(file, {
             header: true,
@@ -56,17 +61,45 @@ export const parseCSV = (file: File): Promise<DeliveryRecord[]> => {
                 return HEADER_MAPPING[cleanHeader] || cleanHeader;
             },
             complete: (results) => {
+                const warnings: string[] = [];
+
                 if (results.errors.length > 0) {
-                    console.warn('CSV Parse Warnings:', results.errors);
+                    warnings.push(`CSV parse warnings: ${results.errors.length} issue(s) detected`);
                 }
 
-                // Validate and shape data
-                const safeData = results.data.map((row: any) => {
-                    // Basic data mapping validation could happen here
-                    return row;
+                // Validate each row against the Zod schema
+                const records: DeliveryRecord[] = [];
+                let skippedCount = 0;
+
+                results.data.forEach((row: unknown, index: number) => {
+                    const result = DeliveryRecordSchema.safeParse(row);
+                    if (result.success) {
+                        records.push(result.data);
+                    } else {
+                        skippedCount++;
+                        if (skippedCount <= 3) {
+                            warnings.push(`Row ${index + 1}: validation failed — ${result.error.issues.map(i => i.message).join(', ')}`);
+                        }
+                    }
                 });
 
-                resolve(safeData as DeliveryRecord[]);
+                if (skippedCount > 3) {
+                    warnings.push(`...and ${skippedCount - 3} more rows skipped`);
+                }
+
+                if (skippedCount > 0) {
+                    warnings.push(`Total: ${skippedCount} row(s) skipped due to validation errors`);
+                }
+
+                // Check if critical columns were mapped
+                if (records.length > 0) {
+                    const sample = records[0];
+                    if (!sample.status && !sample.date) {
+                        warnings.push('Warning: "status" and "date" columns appear empty — CSV header mapping may be incorrect');
+                    }
+                }
+
+                resolve({ records, warnings });
             },
             error: (error) => {
                 reject(error);
