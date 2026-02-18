@@ -47,7 +47,7 @@ function detectPreset(range: DateRange, maxDate: Date | null): Preset | null {
     return null;
 }
 
-export function DateRangePicker({ value, onChange, maxDate, minDate }: DateRangePickerProps) {
+export function DateRangePicker({ value, onChange, maxDate, minDate: _minDate }: DateRangePickerProps) {
     const [open, setOpen] = useState(false);
     const [viewMonth, setViewMonth] = useState(() => new Date());
     const [selecting, setSelecting] = useState<'start' | 'end'>('start');
