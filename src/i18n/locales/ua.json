@@ -61,6 +61,10 @@
     "uniqueAddresses": "Унікальні адреси",
     "courier": "Кур'єр",
     "loaded": "Завантажено",
-    "rate": "Рейт"
+    "rate": "Рейт",
+    "summary": "Підсумок",
+    "performance": "Продуктивність",
+    "avgPerformance": "Сер. прод.",
+    "totalRate": "Заг. відсоток"
   }
 }

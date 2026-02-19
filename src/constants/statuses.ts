@@ -1,4 +1,4 @@
-// Canonical status values (lowercase, trimmed) from Nova Poshta CSV
+// Canonical status values (lowercase, trimmed) from Nova Post CSV
 // Add new status variants here — all comparisons go through predicates below.
 
 export const DELIVERED_STATUSES = new Set(['доставлено']);

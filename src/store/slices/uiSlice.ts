@@ -8,7 +8,7 @@ interface UiState {
 
 const initialState: UiState = {
     isSidebarOpen: true,
-    theme: 'dark', // Default to Dark Mode for Nova Poshta branding
+    theme: 'dark', // Default to Dark Mode for Nova Post branding
     currentLang: 'ua',
 };
 

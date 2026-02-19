@@ -61,6 +61,10 @@
     "uniqueAddresses": "Unique Addresses",
     "courier": "Courier",
     "loaded": "Loaded",
-    "rate": "Rate"
+    "rate": "Rate",
+    "summary": "Summary",
+    "performance": "Performance",
+    "avgPerformance": "Avg. Perf",
+    "totalRate": "Total Rate"
   }
 }
