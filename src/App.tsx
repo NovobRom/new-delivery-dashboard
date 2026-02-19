@@ -5,7 +5,7 @@ import { useAppSelector } from './store/hooks';
 import { Layout } from './components/layout/Layout';
 import { UploadCloud } from 'lucide-react';
 import { DataImport } from './components/wizard/DataImport';
-import { Dashboard } from './components/dashboard/Dashboard';
+import { DashboardPage } from './components/pages/DashboardPage';
 import { DeliveryAnalysisPage } from './components/pages/DeliveryAnalysisPage';
 import { PickupAnalysisPage } from './components/pages/PickupAnalysisPage';
 import { CouriersPage } from './components/pages/CouriersPage';
@@ -46,10 +46,10 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={records.length > 0 ? <Dashboard /> : <Navigate to="/import" replace />}
+          element={records.length > 0 ? <DashboardPage /> : <Navigate to="/import" replace />}
         />
         <Route path="/import" element={records.length > 0 ? <Navigate to="/" replace /> : <ImportPage />} />
-        <Route path="/dashboard" element={records.length > 0 ? <Dashboard /> : <Navigate to="/import" replace />} />
+        <Route path="/dashboard" element={records.length > 0 ? <DashboardPage /> : <Navigate to="/import" replace />} />
         <Route path="/delivery-analysis" element={records.length > 0 ? <DeliveryAnalysisPage /> : <Navigate to="/import" replace />} />
         <Route path="/pickup-analysis" element={records.length > 0 ? <PickupAnalysisPage /> : <Navigate to="/import" replace />} />
         <Route path="/couriers" element={records.length > 0 ? <CouriersPage /> : <Navigate to="/import" replace />} />
