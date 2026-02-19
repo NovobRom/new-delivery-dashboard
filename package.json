@@ -16,6 +16,7 @@
     "clsx": "^2.1.1",
     "date-fns": "^4.1.0",
     "framer-motion": "^12.34.1",
+    "fuse.js": "^7.1.0",
     "i18next": "^25.8.10",
     "lucide-react": "^0.574.0",
     "papaparse": "^5.5.3",

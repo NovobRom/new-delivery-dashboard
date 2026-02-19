@@ -5,18 +5,20 @@ import {
     setSelectedCouriers,
     resetFilters,
 } from '../../store/slices/filtersSlice';
-import {
-    selectUniqueDepartments,
-    selectUniqueCouriers,
-    selectDateBounds,
-} from '../../store/selectors';
+import { createDatasetSelectors } from '../../store/selectors';
+import { DatasetTarget } from '../../store/slices/dataSlice';
 import { DateRangePicker } from '../ui/DateRangePicker';
 import { MultiSelect } from '../ui/MultiSelect';
 import { Filter, X } from 'lucide-react';
 
-export function FilterBar() {
+interface FilterBarProps {
+    target?: DatasetTarget;
+}
+
+export function FilterBar({ target = 'deliveries' }: FilterBarProps) {
     const dispatch = useAppDispatch();
     const filters = useAppSelector((state) => state.filters);
+    const { selectUniqueDepartments, selectUniqueCouriers, selectDateBounds } = createDatasetSelectors(target);
     const departments = useAppSelector(selectUniqueDepartments);
     const couriers = useAppSelector(selectUniqueCouriers);
     const dateBounds = useAppSelector(selectDateBounds);

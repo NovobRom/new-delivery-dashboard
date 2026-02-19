@@ -1,7 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from '../../store/hooks';
-import { selectFilteredRecords } from '../../store/selectors';
+import { createDatasetSelectors } from '../../store/selectors';
+import { DatasetTarget } from '../../store/slices/dataSlice';
 import { calculateKPIs } from '../../utils/analytics';
 import { KpiCard } from './KpiCard';
 import { FilterBar } from './FilterBar';
@@ -13,8 +14,13 @@ import { DensityChart } from './charts/DensityChart';
 import { ErrorBoundary } from '../ui/ErrorBoundary';
 import { Package, CheckCircle2, AlertCircle, Hand, MapPin, BarChart3, Users, ClipboardList } from 'lucide-react';
 
-export function Dashboard() {
+interface DashboardProps {
+    target?: DatasetTarget;
+}
+
+export function Dashboard({ target = 'deliveries' }: DashboardProps) {
     const { t } = useTranslation();
+    const { selectFilteredRecords } = createDatasetSelectors(target);
     const records = useAppSelector(selectFilteredRecords);
 
     // Memoize calculations to prevent re-run on every render unless records change
@@ -23,7 +29,7 @@ export function Dashboard() {
     return (
         <div className="space-y-6 pb-8">
             {/* Filters */}
-            <FilterBar />
+            <FilterBar target={target} />
 
             {/* Primary KPIs */}
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">

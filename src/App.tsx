@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAppSelector } from './store/hooks';
+import { selectHasAnyData } from './store/selectors';
 import { Layout } from './components/layout/Layout';
 import { UploadCloud } from 'lucide-react';
 import { DataImport } from './components/wizard/DataImport';
@@ -13,16 +14,31 @@ import { SettingsPage } from './components/pages/SettingsPage';
 
 function ImportPage() {
   const { t } = useTranslation();
+  const hasData = useAppSelector(selectHasAnyData);
 
   return (
-    <div className="flex flex-col items-center justify-center h-[60vh] text-center space-y-4">
-      <div className="p-6 bg-slate-100 dark:bg-slate-800 rounded-full animate-bounce">
-        <UploadCloud size={48} className="text-brand-red" />
-      </div>
-      <h2 className="text-2xl font-bold">{t('app.noData')}</h2>
-      <p className="text-slate-500 max-w-md">
-        {t('app.noDataDescription')}
-      </p>
+    <div className="flex flex-col items-center justify-center min-h-[60vh] text-center space-y-6 py-8">
+      {!hasData && (
+        <>
+          <div className="p-6 bg-slate-100 dark:bg-slate-800 rounded-full animate-bounce">
+            <UploadCloud size={48} className="text-brand-red" />
+          </div>
+          <div>
+            <h2 className="text-2xl font-bold">{t('app.noData')}</h2>
+            <p className="text-slate-500 max-w-md mt-2">
+              {t('app.noDataDescription')}
+            </p>
+          </div>
+        </>
+      )}
+      {hasData && (
+        <div>
+          <h2 className="text-xl font-bold">{t('sidebar.import')}</h2>
+          <p className="text-slate-500 max-w-md mt-1 text-sm">
+            {t('app.noDataDescription')}
+          </p>
+        </div>
+      )}
       <DataImport />
     </div>
   );
@@ -30,7 +46,7 @@ function ImportPage() {
 
 function App() {
   const { theme } = useAppSelector((state) => state.ui);
-  const { records } = useAppSelector((state) => state.data);
+  const hasData = useAppSelector(selectHasAnyData);
 
   // Sync theme with HTML element
   useEffect(() => {
@@ -46,14 +62,15 @@ function App() {
       <Routes>
         <Route
           path="/"
-          element={records.length > 0 ? <DashboardPage /> : <Navigate to="/import" replace />}
+          element={hasData ? <DashboardPage /> : <Navigate to="/import" replace />}
         />
-        <Route path="/import" element={records.length > 0 ? <Navigate to="/" replace /> : <ImportPage />} />
-        <Route path="/dashboard" element={records.length > 0 ? <DashboardPage /> : <Navigate to="/import" replace />} />
-        <Route path="/delivery-analysis" element={records.length > 0 ? <DeliveryAnalysisPage /> : <Navigate to="/import" replace />} />
-        <Route path="/pickup-analysis" element={records.length > 0 ? <PickupAnalysisPage /> : <Navigate to="/import" replace />} />
-        <Route path="/couriers" element={records.length > 0 ? <CouriersPage /> : <Navigate to="/import" replace />} />
-        <Route path="/settings" element={records.length > 0 ? <SettingsPage /> : <Navigate to="/import" replace />} />
+        {/* Import is always accessible — users can load deliveries AND pickups independently */}
+        <Route path="/import" element={<ImportPage />} />
+        <Route path="/dashboard" element={hasData ? <DashboardPage /> : <Navigate to="/import" replace />} />
+        <Route path="/delivery-analysis" element={hasData ? <DeliveryAnalysisPage /> : <Navigate to="/import" replace />} />
+        <Route path="/pickup-analysis" element={hasData ? <PickupAnalysisPage /> : <Navigate to="/import" replace />} />
+        <Route path="/couriers" element={hasData ? <CouriersPage /> : <Navigate to="/import" replace />} />
+        <Route path="/settings" element={hasData ? <SettingsPage /> : <Navigate to="/import" replace />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </Layout>
