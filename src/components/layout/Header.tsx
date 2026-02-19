@@ -27,9 +27,12 @@ export function Header() {
                     alt="Nova Poshta"
                     className="h-8 w-8"
                 />
-                <h1 className="text-lg font-semibold text-slate-900 dark:text-white">
-                    {t('header.delivery')} <span className="text-brand-red">{t('header.dashboard')}</span>
-                </h1>
+                <div>
+                    <h1 className="text-lg font-semibold text-slate-900 dark:text-white leading-tight">
+                        {t('header.delivery')} <span className="text-brand-red">{t('header.dashboard')}</span>
+                    </h1>
+                    <p className="text-[11px] text-slate-400 dark:text-slate-500">Developed by Roman Novobranets</p>
+                </div>
             </div>
 
             <div className="flex items-center gap-2">
