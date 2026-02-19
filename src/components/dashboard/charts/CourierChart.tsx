@@ -35,7 +35,7 @@ export function CourierChart({ data }: CourierChartProps) {
                 {/* Data Rows */}
                 <div className="overflow-y-visible space-y-1">
                     {couriers.map((courier) => (
-                        <div key={courier.courier} className="flex items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 rounded transition-colors">
+                        <div key={courier.courier} className="relative flex items-center hover:bg-slate-50 dark:hover:bg-slate-800/50 hover:z-20 rounded transition-colors">
                             <div className="sticky left-0 z-10 w-48 flex-shrink-0 truncate p-2 text-slate-700 bg-white dark:bg-slate-800 dark:text-slate-200 font-medium shadow-[2px_0_5px_-2px_rgba(0,0,0,0.1)]" title={courier.courier}>
                                 {courier.courier}
                             </div>
