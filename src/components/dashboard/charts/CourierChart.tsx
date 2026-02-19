@@ -50,7 +50,7 @@ export function CourierChart({ data }: CourierChartProps) {
     };
 
     return (
-        <div className="w-full overflow-x-auto">
+        <div className="w-full overflow-x-auto min-h-[150px] pb-2">
             <div className="min-w-[600px] text-sm">
                 {/* Header Row */}
                 <div className="flex border-b border-slate-200 dark:border-slate-700 pb-2 mb-2">
@@ -104,7 +104,7 @@ export function CourierChart({ data }: CourierChartProps) {
             {/* Portal Tooltip */}
             {tooltip && createPortal(
                 <div
-                    className="fixed z-[9999] w-48 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 text-xs pointer-events-none transform -translate-x-1/2 -translate-y-full mb-2"
+                    className="fixed z-[100000] w-48 bg-white dark:bg-slate-800 p-2 rounded-lg shadow-xl border border-slate-200 dark:border-slate-700 text-xs pointer-events-none transform -translate-x-1/2 -translate-y-full mb-2"
                     style={{
                         left: tooltip.x,
                         top: tooltip.y - 8, // Add a small gap vertically
