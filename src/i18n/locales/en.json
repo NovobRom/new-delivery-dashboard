@@ -8,7 +8,8 @@
     "logo": "LOGISTICS",
     "dashboard": "Dashboard",
     "import": "Data Import",
-    "analysis": "Analysis",
+    "analysis": "Delivery Analysis",
+    "pickupAnalysis": "Pickup Analysis",
     "couriers": "Couriers",
     "settings": "Settings"
   },

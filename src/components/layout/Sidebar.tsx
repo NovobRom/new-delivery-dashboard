@@ -1,4 +1,4 @@
-import { LayoutDashboard, FileSpreadsheet, Settings, Truck, BarChart3, ChevronLeft, ChevronRight } from 'lucide-react';
+import { LayoutDashboard, FileSpreadsheet, Settings, Truck, BarChart3, ChevronLeft, ChevronRight, Package } from 'lucide-react';
 import { NavLink } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
@@ -9,9 +9,10 @@ import { motion } from 'framer-motion';
 const NAV_ITEMS = [
     { icon: LayoutDashboard, labelKey: 'sidebar.dashboard', id: 'dashboard', to: '/dashboard' },
     { icon: FileSpreadsheet, labelKey: 'sidebar.import', id: 'import', to: '/import' },
-    { icon: BarChart3, labelKey: 'sidebar.analysis', id: 'analysis', to: '/dashboard' },
-    { icon: Truck, labelKey: 'sidebar.couriers', id: 'couriers', to: '/dashboard' },
-    { icon: Settings, labelKey: 'sidebar.settings', id: 'settings', to: '/dashboard' },
+    { icon: BarChart3, labelKey: 'sidebar.analysis', id: 'analysis', to: '/delivery-analysis' },
+    { icon: Package, labelKey: 'sidebar.pickupAnalysis', id: 'pickup-analysis', to: '/pickup-analysis' },
+    { icon: Truck, labelKey: 'sidebar.couriers', id: 'couriers', to: '/couriers' },
+    { icon: Settings, labelKey: 'sidebar.settings', id: 'settings', to: '/settings' },
 ];
 
 export function Sidebar() {
