@@ -14,8 +14,8 @@
     "settings": "Налаштування"
   },
   "header": {
-    "delivery": "Доставка",
-    "dashboard": "Дашборд",
+    "delivery": "Дашборд",
+    "dashboard": "Операцій",
     "switchLang": "Змінити мову",
     "toggleTheme": "Змінити тему"
   },
