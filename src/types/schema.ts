@@ -61,8 +61,14 @@ export const DeliveryRecordSchema = z.object({
 
 export type DeliveryRecord = z.infer<typeof DeliveryRecordSchema>;
 
+// Pickup schema — placeholder until real pickup fields are defined.
+// Replace PickupRecordSchema body with actual pickup fields when available.
+export const PickupRecordSchema = DeliveryRecordSchema;
+export type PickupRecord = z.infer<typeof PickupRecordSchema>;
+
 export const AppStateSchema = z.object({
-    records: z.array(DeliveryRecordSchema),
+    deliveries: z.array(DeliveryRecordSchema),
+    pickups: z.array(PickupRecordSchema),
     lastUpdated: z.string().optional(),
 });
 
