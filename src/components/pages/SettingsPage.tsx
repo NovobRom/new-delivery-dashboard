@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Settings, UserX, X, Plus } from 'lucide-react';
 import { useSelector, useDispatch } from 'react-redux';
@@ -8,33 +8,47 @@ import { addExcludedCourier, removeExcludedCourier } from '../../store/slices/se
 export function SettingsPage() {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const excludedCouriers = useSelector((state: RootState) => state.settings.excludedCouriers);
 
-    const [newName, setNewName] = useState('');
+    const excludedCouriers = useSelector((state: RootState) => state.settings.excludedCouriers);
+    const deliveries = useSelector((state: RootState) => state.data.deliveries);
+    const pickups = useSelector((state: RootState) => state.data.pickups);
+
+    // Compute available couriers for the dropdown
+    const availableCouriers = useMemo(() => {
+        const allIds = new Set<string>();
+        deliveries.forEach(r => { if (r.courierId) allIds.add(r.courierId.trim()); });
+        pickups.forEach(r => { if (r.courierId) allIds.add(r.courierId.trim()); });
+
+        const excludedSet = new Set(excludedCouriers.map(c => c.toLowerCase()));
+
+        return Array.from(allIds)
+            .filter(id => !excludedSet.has(id.toLowerCase()))
+            .sort((a, b) => a.localeCompare(b));
+    }, [deliveries, pickups, excludedCouriers]);
+
+    const [selectedName, setSelectedName] = useState('');
     const [error, setError] = useState('');
 
     const handleAdd = (e: React.FormEvent) => {
         e.preventDefault();
-        const cleanName = newName.trim();
+        const cleanName = selectedName.trim();
 
         if (!cleanName) {
             setError(t('settings.emptyError'));
             return;
         }
 
-        const isDuplicate = excludedCouriers.some(
-            c => c.toLowerCase() === cleanName.toLowerCase()
-        );
-
-        if (isDuplicate) {
-            setError(t('settings.duplicateError'));
-            return;
-        }
+        // The availableCouriers list already filters out duplicates, so no need for an explicit duplicate check here.
+        // If the user somehow selects an already excluded courier (which shouldn't happen with the dropdown),
+        // the dispatch will simply not add it again if the reducer handles it.
+        // For now, we'll assume the dropdown prevents duplicates from being selected.
 
         dispatch(addExcludedCourier(cleanName));
-        setNewName('');
+        setSelectedName('');
         setError('');
     };
+
+    const hasData = deliveries.length > 0 || pickups.length > 0;
 
     return (
         <div className="max-w-4xl mx-auto space-y-6">
@@ -61,24 +75,37 @@ export function SettingsPage() {
                 <form onSubmit={handleAdd} className="flex gap-4 mb-8">
                     <div className="flex-1">
                         <label className="sr-only">{t('settings.courierNameLabel')}</label>
-                        <input
-                            type="text"
-                            value={newName}
+                        <select
+                            value={selectedName}
                             onChange={(e) => {
-                                setNewName(e.target.value);
+                                setSelectedName(e.target.value);
                                 if (error) setError('');
                             }}
-                            placeholder={t('settings.courierNamePlaceholder')}
-                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 bg-transparent dark:text-white transition-colors ${error
-                                    ? 'border-red-500 focus:ring-red-200'
-                                    : 'border-slate-200 dark:border-slate-700 focus:ring-brand-red/20 focus:border-brand-red'
+                            disabled={!hasData || availableCouriers.length === 0}
+                            className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 bg-transparent dark:text-white transition-colors appearance-none ${(!hasData || availableCouriers.length === 0)
+                                    ? 'bg-slate-50 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed border-slate-200 dark:border-slate-700'
+                                    : error
+                                        ? 'border-red-500 focus:ring-red-200'
+                                        : 'border-slate-200 dark:border-slate-700 focus:ring-brand-red/20 focus:border-brand-red'
                                 }`}
-                        />
+                        >
+                            <option value="" disabled className="text-slate-500 font-normal">
+                                {!hasData
+                                    ? t('settings.noDataToSelect')
+                                    : t('settings.selectCourier')}
+                            </option>
+                            {availableCouriers.map(courier => (
+                                <option key={courier} value={courier} className="text-slate-800 dark:text-white">
+                                    {courier}
+                                </option>
+                            ))}
+                        </select>
                         {error && <p className="text-red-500 text-sm mt-1">{error}</p>}
                     </div>
                     <button
                         type="submit"
-                        className="flex outline-none items-center space-x-2 px-6 py-2 bg-brand-red hover:bg-red-600 text-white rounded-lg transition-colors h-[42px]"
+                        disabled={!selectedName}
+                        className="flex outline-none items-center space-x-2 px-6 py-2 bg-brand-red hover:bg-red-600 text-white rounded-lg transition-colors h-[42px] disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         <Plus size={20} />
                         <span>{t('settings.addCourier')}</span>

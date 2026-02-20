@@ -107,6 +107,8 @@
     "remove": "Remove",
     "emptyList": "No excluded couriers yet",
     "duplicateError": "Courier already in the list",
-    "emptyError": "Name cannot be empty"
+    "emptyError": "Please select a courier",
+    "selectCourier": "Select a courier...",
+    "noDataToSelect": "Import data first"
   }
 }
