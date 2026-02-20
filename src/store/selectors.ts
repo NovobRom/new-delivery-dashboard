@@ -41,20 +41,70 @@ export function createDatasetSelectors(target: DatasetTarget) {
                 filtered = filtered.filter((r) => filters.selectedCouriers.includes(r.courierId));
             }
 
+            // Country multi-filter
+            if (filters.selectedCountries.length > 0) {
+                filtered = filtered.filter((r) => filters.selectedCountries.includes(r.country));
+            }
+
+            // City multi-filter
+            if (filters.selectedCities.length > 0) {
+                filtered = filtered.filter((r) => filters.selectedCities.includes(r.city));
+            }
+
             return filtered;
         },
     );
 
     /** Unique departments for filter dropdown */
     const selectUniqueDepartments = createSelector(
-        [selectRecords],
-        (records) => [...new Set(records.map((r) => r.department).filter(Boolean))].sort(),
+        [selectRecords, selectFilters],
+        (records, filters) => {
+            let relevantRecords = records;
+            if (filters.selectedCountries.length > 0) {
+                relevantRecords = relevantRecords.filter(r => filters.selectedCountries.includes(r.country));
+            }
+            if (filters.selectedCities.length > 0) {
+                relevantRecords = relevantRecords.filter(r => filters.selectedCities.includes(r.city));
+            }
+            return [...new Set(relevantRecords.map((r) => r.department).filter(Boolean))].sort();
+        }
     );
 
     /** Unique couriers for filter dropdown */
     const selectUniqueCouriers = createSelector(
+        [selectRecords, selectFilters],
+        (records, filters) => {
+            let relevantRecords = records;
+            if (filters.selectedCountries.length > 0) {
+                relevantRecords = relevantRecords.filter(r => filters.selectedCountries.includes(r.country));
+            }
+            if (filters.selectedCities.length > 0) {
+                relevantRecords = relevantRecords.filter(r => filters.selectedCities.includes(r.city));
+            }
+            if (filters.selectedDepartments.length > 0) {
+                relevantRecords = relevantRecords.filter(r => filters.selectedDepartments.includes(r.department));
+            }
+            return [...new Set(relevantRecords.map((r) => r.courierId).filter(Boolean))].sort();
+        }
+    );
+
+    /** Unique countries for filter dropdown */
+    const selectUniqueCountries = createSelector(
         [selectRecords],
-        (records) => [...new Set(records.map((r) => r.courierId).filter(Boolean))].sort(),
+        (records) => [...new Set(records.map((r) => r.country).filter(Boolean))].sort(),
+    );
+
+    /** Unique cities for filter dropdown (cascading based on country selection) */
+    const selectUniqueCities = createSelector(
+        [selectRecords, selectFilters],
+        (records, filters) => {
+            // Support cascading: if countries are selected, only show cities in those countries
+            const relevantRecords = filters.selectedCountries.length > 0
+                ? records.filter(r => filters.selectedCountries.includes(r.country))
+                : records;
+
+            return [...new Set(relevantRecords.map((r) => r.city).filter(Boolean))].sort();
+        }
     );
 
     /** Min/max dates from the dataset — used for preset calculations */
@@ -78,6 +128,8 @@ export function createDatasetSelectors(target: DatasetTarget) {
         selectFilteredRecords,
         selectUniqueDepartments,
         selectUniqueCouriers,
+        selectUniqueCountries,
+        selectUniqueCities,
         selectDateBounds,
     };
 }
