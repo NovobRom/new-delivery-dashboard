@@ -44,6 +44,7 @@
     "processingFile": "Reading and validating data...",
     "successTitle": "Import successful!",
     "successCount": "{{count}} records loaded",
+    "successCountFiltered": "{{count}} records loaded. {{dropped}} records filtered out based on excluded couriers settings.",
     "goToAnalysis": "Go to Analysis",
     "importMore": "Import another file",
     "errorTitle": "Import failed",
@@ -95,5 +96,17 @@
     "performance": "Performance",
     "avgPerformance": "Avg. Perf",
     "totalRate": "Total Rate"
+  },
+  "settings": {
+    "title": "Settings",
+    "excludedCouriers": "Excluded Couriers",
+    "excludedCouriersDesc": "Add courier names to exclude them from future imports.",
+    "addCourier": "Add Courier",
+    "courierNameLabel": "Courier Name",
+    "courierNamePlaceholder": "e.g. John Doe",
+    "remove": "Remove",
+    "emptyList": "No excluded couriers yet",
+    "duplicateError": "Courier already in the list",
+    "emptyError": "Name cannot be empty"
   }
 }

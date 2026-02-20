@@ -10,6 +10,7 @@ interface ProcessingStepProps {
     state: ProcessingState;
     target: DatasetTarget;
     recordCount?: number;
+    droppedCount?: number;
     warnings?: string[];
     error?: string;
     onReset: () => void;
@@ -19,6 +20,7 @@ export function ProcessingStep({
     state,
     target,
     recordCount = 0,
+    droppedCount = 0,
     warnings = [],
     error,
     onReset,
@@ -59,8 +61,10 @@ export function ProcessingStep({
                         <p className="text-xl font-bold text-slate-800 dark:text-slate-100">
                             {t('wizard.successTitle')}
                         </p>
-                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1">
-                            {t('wizard.successCount', { count: recordCount })}
+                        <p className="text-sm text-slate-500 dark:text-slate-400 mt-1 px-4">
+                            {droppedCount > 0
+                                ? t('wizard.successCountFiltered', { count: recordCount, dropped: droppedCount })
+                                : t('wizard.successCount', { count: recordCount })}
                         </p>
                     </div>
 

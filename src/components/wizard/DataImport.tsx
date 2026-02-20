@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch } from '../../store/hooks';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
 import { setRecords, setLoading, DatasetTarget } from '../../store/slices/dataSlice';
 import { previewCSV, parseCSV, CSVPreview, UserMapping } from '../../utils/csvParser';
 import { UploadStep } from './UploadStep';
@@ -21,6 +23,7 @@ interface WizardState {
     preview: CSVPreview | null;
     processingState: ProcessingState;
     recordCount: number;
+    droppedCount: number;
     warnings: string[];
     error: string | null;
 }
@@ -32,6 +35,7 @@ const INITIAL_STATE: WizardState = {
     preview: null,
     processingState: 'loading',
     recordCount: 0,
+    droppedCount: 0,
     warnings: [],
     error: null,
 };
@@ -40,6 +44,7 @@ export function DataImport() {
     const dispatch = useAppDispatch();
     const { t } = useTranslation();
     const [state, setState] = useState<WizardState>(INITIAL_STATE);
+    const excludedCouriers = useSelector((s: RootState) => s.settings.excludedCouriers);
 
     // -- Helpers --
     const update = (patch: Partial<WizardState>) =>
@@ -84,11 +89,19 @@ export function DataImport() {
                 delimiter: state.preview.detectedDelimiter,
             });
 
-            dispatch(setRecords({ target: state.target, records: result.records }));
+            // Filter out excluded couriers
+            const excludedSet = new Set(excludedCouriers.map(n => n.trim().toLowerCase()));
+            const cleanRecords = result.records.filter(
+                record => !excludedSet.has(record.courierId?.trim().toLowerCase() || '')
+            );
+            const droppedCount = result.records.length - cleanRecords.length;
+
+            dispatch(setRecords({ target: state.target, records: cleanRecords }));
 
             update({
                 processingState: 'success',
-                recordCount: result.records.length,
+                recordCount: cleanRecords.length,
+                droppedCount,
                 warnings: result.warnings,
             });
         } catch (err) {
@@ -137,8 +150,8 @@ export function DataImport() {
                             </div>
                             <span
                                 className={`text-xs font-medium truncate transition-colors hidden sm:block ${idx === currentStepIndex
-                                        ? 'text-slate-800 dark:text-slate-100'
-                                        : 'text-slate-400 dark:text-slate-500'
+                                    ? 'text-slate-800 dark:text-slate-100'
+                                    : 'text-slate-400 dark:text-slate-500'
                                     }`}
                             >
                                 {label}
@@ -147,8 +160,8 @@ export function DataImport() {
                         {idx < STEPS.length - 1 && (
                             <div
                                 className={`flex-1 h-px transition-colors ${idx < currentStepIndex
-                                        ? 'bg-emerald-400 dark:bg-emerald-600'
-                                        : 'bg-slate-200 dark:bg-slate-700'
+                                    ? 'bg-emerald-400 dark:bg-emerald-600'
+                                    : 'bg-slate-200 dark:bg-slate-700'
                                     }`}
                             />
                         )}
@@ -175,6 +188,7 @@ export function DataImport() {
                         state={state.processingState}
                         target={state.target}
                         recordCount={state.recordCount}
+                        droppedCount={state.droppedCount}
                         warnings={state.warnings}
                         error={state.error ?? undefined}
                         onReset={reset}

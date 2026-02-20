@@ -44,6 +44,7 @@
     "processingFile": "Читаємо та перевіряємо дані...",
     "successTitle": "Імпорт успішний!",
     "successCount": "Завантажено {{count}} записів",
+    "successCountFiltered": "Завантажено {{count}} записів. Відфільтровано {{dropped}} записів згідно з налаштуваннями виключених кур'єрів.",
     "goToAnalysis": "Перейти до аналізу",
     "importMore": "Завантажити ще файл",
     "errorTitle": "Помилка імпорту",
@@ -95,5 +96,17 @@
     "performance": "Продуктивність",
     "avgPerformance": "Сер. прод.",
     "totalRate": "Заг. відсоток"
+  },
+  "settings": {
+    "title": "Налаштування",
+    "excludedCouriers": "Виключені кур'єри",
+    "excludedCouriersDesc": "Додайте ПІБ кур'єрів, щоб виключити їх під час наступних завантажень файлів.",
+    "addCourier": "Додати",
+    "courierNameLabel": "ПІБ Кур'єра",
+    "courierNamePlaceholder": "напр. Іванов Іван",
+    "remove": "Видалити",
+    "emptyList": "Список виключених кур'єрів пустий",
+    "duplicateError": "Цей кур'єр вже є у списку",
+    "emptyError": "Ім'я не може бути пустим"
   }
 }
