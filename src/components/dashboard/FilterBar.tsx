@@ -3,6 +3,8 @@ import {
     setDateRange,
     setSelectedDepartments,
     setSelectedCouriers,
+    setSelectedCountries,
+    setSelectedCities,
     resetFilters,
 } from '../../store/slices/filtersSlice';
 import { createDatasetSelectors } from '../../store/selectors';
@@ -18,16 +20,26 @@ interface FilterBarProps {
 export function FilterBar({ target = 'deliveries' }: FilterBarProps) {
     const dispatch = useAppDispatch();
     const filters = useAppSelector((state) => state.filters);
-    const { selectUniqueDepartments, selectUniqueCouriers, selectDateBounds } = createDatasetSelectors(target);
+    const {
+        selectUniqueDepartments,
+        selectUniqueCouriers,
+        selectUniqueCountries,
+        selectUniqueCities,
+        selectDateBounds
+    } = createDatasetSelectors(target);
     const departments = useAppSelector(selectUniqueDepartments);
     const couriers = useAppSelector(selectUniqueCouriers);
+    const countries = useAppSelector(selectUniqueCountries);
+    const cities = useAppSelector(selectUniqueCities);
     const dateBounds = useAppSelector(selectDateBounds);
 
     const hasActiveFilters =
         filters.dateRange.start ||
         filters.dateRange.end ||
         filters.selectedDepartments.length > 0 ||
-        filters.selectedCouriers.length > 0;
+        filters.selectedCouriers.length > 0 ||
+        filters.selectedCountries.length > 0 ||
+        filters.selectedCities.length > 0;
 
     return (
         <div className="relative z-[60] flex flex-wrap items-center gap-3 rounded-xl border border-slate-200 bg-white p-3 shadow-sm dark:border-slate-800 dark:bg-slate-800/50 backdrop-blur-sm">
@@ -39,6 +51,24 @@ export function FilterBar({ target = 'deliveries' }: FilterBarProps) {
                 onChange={(range) => dispatch(setDateRange(range))}
                 maxDate={dateBounds.max}
                 minDate={dateBounds.min}
+            />
+
+            {/* Country multi-select */}
+            <MultiSelect
+                options={countries}
+                selected={filters.selectedCountries}
+                onChange={(vals) => dispatch(setSelectedCountries(vals))}
+                placeholder="Країна"
+                selectedLabel="Країн"
+            />
+
+            {/* City multi-select */}
+            <MultiSelect
+                options={cities}
+                selected={filters.selectedCities}
+                onChange={(vals) => dispatch(setSelectedCities(vals))}
+                placeholder="Місто"
+                selectedLabel="Міст"
             />
 
             {/* Department multi-select */}

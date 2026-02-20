@@ -4,12 +4,16 @@ interface FilterState {
     dateRange: { start: string | null; end: string | null };
     selectedDepartments: string[];
     selectedCouriers: string[];
+    selectedCountries: string[];
+    selectedCities: string[];
 }
 
 const initialState: FilterState = {
     dateRange: { start: null, end: null },
     selectedDepartments: [],
     selectedCouriers: [],
+    selectedCountries: [],
+    selectedCities: [],
 };
 
 export const filtersSlice = createSlice({
@@ -41,10 +45,18 @@ export const filtersSlice = createSlice({
                 state.selectedCouriers.splice(idx, 1);
             }
         },
+        setSelectedCountries: (state, action: PayloadAction<string[]>) => {
+            state.selectedCountries = action.payload;
+        },
+        setSelectedCities: (state, action: PayloadAction<string[]>) => {
+            state.selectedCities = action.payload;
+        },
         resetFilters: (state) => {
             state.dateRange = { start: null, end: null };
             state.selectedDepartments = [];
             state.selectedCouriers = [];
+            state.selectedCountries = [];
+            state.selectedCities = [];
         }
     },
 });
@@ -55,6 +67,8 @@ export const {
     toggleDepartment,
     setSelectedCouriers,
     toggleCourier,
+    setSelectedCountries,
+    setSelectedCities,
     resetFilters,
 } = filtersSlice.actions;
 
