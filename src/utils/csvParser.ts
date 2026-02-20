@@ -198,7 +198,7 @@ export async function previewCSV(file: File): Promise<CSVPreview> {
             Papa.parse(file, {
                 header: true,
                 preview: 5,
-                skipEmptyLines: true,
+                skipEmptyLines: 'greedy',
                 encoding: detectedEncoding,
                 delimiter: detectedDelimiter,
                 complete: (results) => {
@@ -242,7 +242,7 @@ export async function parseCSV(
 
             Papa.parse(file, {
                 header: true,
-                skipEmptyLines: true,
+                skipEmptyLines: 'greedy',
                 encoding,
                 delimiter,
                 transformHeader: (header: string) => {
