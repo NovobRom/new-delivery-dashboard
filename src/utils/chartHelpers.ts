@@ -26,8 +26,8 @@ export const prepareRegionalData = (records: DeliveryRecord[]) => {
     const grouped: Record<string, { name: string; delivered: number; total: number }> = {};
 
     records.forEach((r) => {
-        // Use Route Code as the region/subdivision identifier
-        const region = r.routeCode || 'Unknown';
+        // Use Department as the subdivision identifier
+        const region = r.department || 'Unknown';
 
         if (!grouped[region]) {
             grouped[region] = { name: region, delivered: 0, total: 0 };

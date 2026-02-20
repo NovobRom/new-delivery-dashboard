@@ -1,4 +1,3 @@
-import { useMemo } from 'react';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell, LabelList } from 'recharts';
 import { DeliveryRecord } from '../../../types/schema';
 import { prepareRegionalData } from '../../../utils/chartHelpers';
@@ -10,7 +9,7 @@ interface RegionalChartProps {
 }
 
 export function RegionalChart({ data }: RegionalChartProps) {
-    const chartData = useMemo(() => prepareRegionalData(data), [data]);
+    const chartData = prepareRegionalData(data);
     const { isDark } = useThemeMode();
     const ct = getChartTheme(isDark);
 
