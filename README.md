@@ -1,73 +1,95 @@
-# React + TypeScript + Vite
+# Nova Post Operations Dashboard
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, responsive Single Page Application (SPA) designed for analyzing end-to-end logistics metrics, courier performance, and generating vital data insights.
 
-Currently, two official plugins are available:
+## 🚀 Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Data Import via CSV**: Easily upload reports directly into the application with robust file parsing (via Papa Parse).
+- **Interactive Dashboards**: Advanced charting features (via Recharts) for visualization of delivery metrics.
+- **Detailed Analytics**:
+  - Delivery Analysis
+  - Pickup Analysis
+  - Couriers Metrics
+- **Multi-language Support (i18n)**: Seamless switching between languages (Ukrainian, English).
+- **Dark/Light Mode**: Full theme customization, including automatic system preference detection.
+- **Responsive Layout**: Designed to work gracefully across desktop and tablet interfaces.
 
-## React Compiler
+## 🛠 Tech Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Core**: React 19, TypeScript
+- **State Management**: Redux Toolkit (`@reduxjs/toolkit`, `react-redux`)
+- **Routing**: React Router (`react-router`)
+- **Styling**: Tailwind CSS, Framer Motion (animations)
+- **Data Visualization**: Recharts
+- **Internationalization**: i18next, react-i18next
+- **Build Tool**: Vite
+- **Validation**: Zod (schema-based data validation)
+- **Icons**: Lucide React
 
-## Expanding the ESLint configuration
+## 📦 Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Ensure you have [Node.js](https://nodejs.org/en/) installed on your machine (`v18` or later recommended).
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository and navigate into the project directory:
+   ```bash
+   cd new-delivery-dashboard
+   ```
+
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running Locally
+
+To start the development server with Hot Module Replacement (HMR):
+
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+The application will be accessible at `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Production Build
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To build the application for production:
+
+```bash
+npm run build
 ```
+
+The compiled output will be generated in the `dist` directory. You can preview the production build locally using:
+
+```bash
+npm run preview
+```
+
+## 🧹 Code Quality & Testing
+
+- **Linting**: Enforced with ESLint and TypeScript compilation checks. Run `npm run lint`.
+- **Testing**: Using Vitest and React Testing Library. Run `npm run test` or `npm run test:ci` for continuous integration test flows.
+
+## 📂 Project Structure
+
+```
+new-delivery-dashboard/
+├── public/                 # Static assets (favicon, logos, etc.)
+├── src/
+│   ├── components/         # Reusable UI components and page layouts
+│   ├── store/              # Redux slices and store configuration
+│   ├── i18n/               # Internationalization logic and locales
+│   ├── App.tsx             # Root React component with routing logic
+│   └── main.tsx            # Application entry point
+├── index.html              # HTML template
+├── tailwind.config.js      # Tailwind CSS configuration
+├── vite.config.ts          # Vite bundler configuration
+└── package.json            # Project metadata and dependencies
+```
+
+## 📄 License
+
+This project is private and intended for internal use only.

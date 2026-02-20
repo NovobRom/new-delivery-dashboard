@@ -1,6 +1,6 @@
 {
   "app": {
-    "title": "Delivery Dashboard",
+    "title": "Operations Dashboard",
     "noData": "No Data Loaded",
     "noDataDescription": "Please import your \"Detailed Table\" CSV file to start analyzing the logistics performance."
   },

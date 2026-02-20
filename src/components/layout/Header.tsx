@@ -24,7 +24,7 @@ export function Header() {
             <div className="flex items-center gap-4">
                 <img
                     src="https://cdn.brandfetch.io/idO8pyOFG4/w/48/h/48/theme/dark/logo.png?c=1dxbfHSJFAPEGdCLU4o5B"
-                    alt="Nova Poshta"
+                    alt="Nova Post"
                     className="h-8 w-8"
                 />
                 <h1 className="text-lg font-semibold text-slate-900 dark:text-white">
