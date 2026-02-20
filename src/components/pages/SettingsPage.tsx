@@ -83,19 +83,19 @@ export function SettingsPage() {
                             }}
                             disabled={!hasData || availableCouriers.length === 0}
                             className={`w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 bg-transparent dark:text-white transition-colors appearance-none ${(!hasData || availableCouriers.length === 0)
-                                    ? 'bg-slate-50 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed border-slate-200 dark:border-slate-700'
-                                    : error
-                                        ? 'border-red-500 focus:ring-red-200'
-                                        : 'border-slate-200 dark:border-slate-700 focus:ring-brand-red/20 focus:border-brand-red'
+                                ? 'bg-slate-50 dark:bg-slate-900/50 text-slate-400 cursor-not-allowed border-slate-200 dark:border-slate-700'
+                                : error
+                                    ? 'border-red-500 focus:ring-red-200'
+                                    : 'border-slate-200 dark:border-slate-700 focus:ring-brand-red/20 focus:border-brand-red'
                                 }`}
                         >
-                            <option value="" disabled className="text-slate-500 font-normal">
+                            <option value="" disabled className="bg-white dark:bg-slate-800 text-slate-500 font-normal">
                                 {!hasData
                                     ? t('settings.noDataToSelect')
                                     : t('settings.selectCourier')}
                             </option>
                             {availableCouriers.map(courier => (
-                                <option key={courier} value={courier} className="text-slate-800 dark:text-white">
+                                <option key={courier} value={courier} className="bg-white dark:bg-slate-800 text-slate-800 dark:text-white">
                                     {courier}
                                 </option>
                             ))}
